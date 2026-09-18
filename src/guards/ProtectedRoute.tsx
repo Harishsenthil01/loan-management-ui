@@ -1,0 +1,18 @@
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
+
+/**
+ * Blocks access to nested routes unless the user is authenticated.
+ * Unauthenticated users are redirected to /login, and the attempted
+ * location is preserved so we can send them back after signing in.
+ */
+export default function ProtectedRoute() {
+  const { user } = useAuth();
+  const location = useLocation();
+
+  if (!user) {
+    return <Navigate to="/login" replace state={{ from: location }} />;
+  }
+
+  return <Outlet />;
+}
